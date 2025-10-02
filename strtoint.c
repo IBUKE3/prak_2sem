@@ -22,8 +22,8 @@ int strtoint(const char str[], int base, int *res) {
     if (t==-1) return -1; // wring diigt for this base
     r+=b*t;
     b*=base;
+    if (r > INT_MAX) return -1; // overflow of int
   }
-  if (r > INT_MAX) return -1; // overflow of int
   *res=r;
   return 1;
 }
