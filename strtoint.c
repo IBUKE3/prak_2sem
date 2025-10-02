@@ -23,7 +23,7 @@ int strtoint(const char str[], int base, int *res) {
     r+=b*t;
     b*=base;
   }
-  if (r >= INT_MAX) return -1; // overflow of int
+  if (r > INT_MAX) return -1; // overflow of int
   *res=r;
   return 1;
 }
