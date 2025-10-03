@@ -6,8 +6,7 @@ enum { MAX_LEN = 80 };
 
 
 int my_strlen(const char* str){
-  //char* p = (char *) str;
-  char* p = str;
+  char* p = (char *) str;
   while ((*p != '\0') && (*p != '\n')) p++;
   return p-str;
 }
