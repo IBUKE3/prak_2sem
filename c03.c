@@ -3,7 +3,7 @@
 char* fgets( char* str, int count, FILE* stream );
 
 
-enum {MAXLEN_1 = 80 + 1, MAXLEN_2 = 20 + 1}; 
+enum {MAXLEN_1 = 80 + 2, MAXLEN_2 = 20 + 2}; 
 
 
 int strfind(const char* str, const char *symbols){
