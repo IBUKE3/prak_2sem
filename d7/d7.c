@@ -60,6 +60,12 @@ void rprint(const List* list) {
 
 
 void exclude(List* list, Node* item) {
+  if (list -> len == 1) {
+    list -> first = NULL;
+    list -> last = NULL;
+    list -> len = 0;
+    return;
+  }
   if (item == list -> first) {
     list -> first = item -> next;
     (list -> first) -> prev = NULL; 
@@ -76,18 +82,34 @@ void exclude(List* list, Node* item) {
 
 void process (List* list) {
   Node* elem  = list -> first;
-  while (elem) {
+  Node* lastnode = list -> last;
+  while (elem != lastnode) {
     int x = elem -> data;
     Node* tmp = elem -> next;
     if (x > 100) {
       exclude(list, elem);
       append(list, elem);
+      elem -> next = NULL;
     } else if ((x&1) == 1) {
       exclude(list, elem);
       free(elem);
     }
     elem = tmp;
   }
+  if (elem) {
+  int x = elem -> data;
+  Node* tmp = elem -> next;
+  if (x > 100) {
+    exclude(list, elem);
+    append(list, elem);
+    elem -> next = NULL;
+  } else if ((x&1) == 1) {
+    exclude(list, elem);
+    free(elem);
+  }
+    elem = tmp;
+  }
+  
 }
 
 
@@ -111,7 +133,7 @@ int main(void) {
 
   input(&l);
   
-  process (&l);
+  process(&l);
 
   rprint(&l);
 
