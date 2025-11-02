@@ -16,10 +16,8 @@ int main (int argc, char* argv[]) {
       putchar(c);
       c = fgetc(f);
     }
-    
+    if (c == '\n') putchar('\n'); 
     if (c != EOF) c = fgetc(f);
-    
-    putchar('\n');
      
   }
 
