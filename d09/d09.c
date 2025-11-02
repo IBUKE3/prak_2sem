@@ -12,6 +12,9 @@ struct List {
     struct Node * last;
 };
 
+typedef struct List List;
+typedef struct Node Node;
+
 struct Node* create(int value) {
     struct Node * node = malloc(sizeof(struct Node));
     *node = (struct Node) { .value = value };
@@ -46,7 +49,29 @@ void release(struct List * list) {
 }
 
 struct List merge(struct List * list1, struct List * list2) {
-    // TODO
+  List resl;
+  Node* l1 = list1->first;
+  Node* l2 = list2->first;
+  while (l1 && l2) {
+    if (l1->value <= l2->value) {
+      append(&resl, create(l1->value));
+      l1 = l1->next;
+    } else {
+      append(&resl, create(l2->value));
+      l2 = l2->next;
+    }
+  }
+
+  while (l1) {
+    append(&resl, create(l1->value));
+    l1 = l1->next;
+  }
+  while (l2) {
+    append(&resl, create(l2->value));
+    l2 = l2->next;
+  }
+
+  return resl;
 }
 
 int main(void)
