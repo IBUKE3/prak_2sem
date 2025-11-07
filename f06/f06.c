@@ -58,20 +58,17 @@ int main(int argc, char* argv[]){
     if (get_bit(m, i)) { 
       if (left==-1) {
 	left = i; // putting left border
-      } //else {
+      } 
         if (i-left+1==maxones) {
           for (int j = left; j <= i; j++) {
             toggle_bit(m, j);
       	  }
+	  left = -1;
         }
-      //}
-    } else {
-      left=-1; // current bit is zero
     }
   }
 
-  fclose(f);
-  f = fopen(argv[1], "w"); // erasing current elements in file
+  fseek(f, 0, SEEK_SET); // no need to erase current elements, better overwrite
 			
   for (int i = 0; i < file_size; i++) {
     fwrite(m+i, sizeof(unsigned char), 1, f);
