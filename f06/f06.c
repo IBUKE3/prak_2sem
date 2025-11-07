@@ -36,7 +36,7 @@ size_t max_seq1(unsigned char * m, size_t size) {
 
 
 int main(int argc, char* argv[]){
-  FILE* f = fopen(argv[1], "r");
+  FILE* f = fopen(argv[1], "r+");
   fseek(f, 0, SEEK_END);
   long file_size = ftell(f);
 
@@ -63,13 +63,13 @@ int main(int argc, char* argv[]){
           for (int j = left; j <= i; j++) {
             toggle_bit(m, j);
       	  }
-	  left = -1;
         }
-    }
+    } else { left = -1; }
   }
 
   fseek(f, 0, SEEK_SET); // no need to erase current elements, better overwrite
-			
+  
+
   for (int i = 0; i < file_size; i++) {
     fwrite(m+i, sizeof(unsigned char), 1, f);
   }
