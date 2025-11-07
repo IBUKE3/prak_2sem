@@ -3,7 +3,6 @@ typedef long long ll;
 
 int main(void) {
   int a, b, n;
-  ll res = 0;
 
   if (scanf("%d%d%d", &a, &b, &n) != 3) return 1;
 
@@ -16,8 +15,7 @@ int main(void) {
   for (int i = a; i < b; i++) {
     printf("%*d", n, i);
     for (int j = a; j < b; j++) {
-      res = i*j;
-      printf(" %*lld", n, res);
+      printf(" %*lld", n, (ll) i*j);
     }
     printf("\n");
   }
