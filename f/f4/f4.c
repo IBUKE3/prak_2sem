@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
   }
 
   fseek(tmf, 0, SEEK_SET);
+  fclose(f);
   f = fopen(argv[1], "w"); // clearing the file
 
   while (fgets(l, sizeof(l), tmf)) {
