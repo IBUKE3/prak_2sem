@@ -6,7 +6,7 @@
 
 int main(void){
   setbuf(stdin, 0);
-  char s, c;
+  int s, c;
   s = fgetc(stdin);
   while ((c = fgetc(stdin))!= -1) {
     int r = fork(); 
@@ -15,8 +15,10 @@ int main(void){
       exit(0);
     } else if (r==-1) {
       wait(NULL);
-      if (fork()==0 && c==s) {putc(c, stdout); putc(c, stdout);};
-      exit(0);
+      if (fork()==0) {	     
+	if (c==s) {putc(c, stdout); putc(c, stdout);};
+        exit(0);
+      }
     }
   }
 
