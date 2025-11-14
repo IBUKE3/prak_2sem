@@ -9,11 +9,11 @@ int main(int argc, char* argv[]){
   int sz = 0;
   while(*cq) {
     sz++;
-  i cq++;
+    cq++;
   }
   if (sz < 3) return 1;
 
-  cq = argv[sz-1];
+  char* tq = argv[sz-1];
   
   argv[sz-1] = NULL;
 
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
   int st = 0;
   wait(&st);
   if(WIFEXITED(st)&&WEXITSTATUS(st)==0) {
-    argv[sz-1] = cq;
+    argv[sz-1] = tq;
     if (fork()==0) {
       execv(argv[sz-1], argv+sz-1);
       execvp(argv[sz-1], argv+sz-1);
