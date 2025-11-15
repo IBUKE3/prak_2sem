@@ -6,8 +6,7 @@
 
 
 int main(int argc, char* argv[]) {
-  if (fork()==0) {
-    
+  if (fork()==0) { 
     int fd = open(argv[3], O_WRONLY | O_CREAT | O_APPEND, 0666);
     dup2(fd, 1);
 
@@ -19,17 +18,25 @@ int main(int argc, char* argv[]) {
     int status;
     wait(&status);
 
-    if (WIFEXITED(status) && !status) exit(status); // first success
+    if (WIFEXITED(status) && !WEXITSTATUS(status)) exit(0); // first success
+						    
     if (fork()==0) {
       execlp(argv[2], argv[2], NULL);
       exit(127);
     }
+
+    //printf("a=%d\n",  WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status));
+
     wait(&status);
-    exit(status);
+
+    //printf("b=%d\n",  WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status));
+    exit(WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status));
   }
 
   int st;
   wait(&st);
+
+  //printf("c=%d\n", WIFEXITED(st) ? WEXITSTATUS(st) : 128 + WTERMSIG(st));
 
   if (WIFEXITED(st)&&WEXITSTATUS(st)==0) {
     if (fork()==0) {
