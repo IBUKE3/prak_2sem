@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     int status;
     wait(&status);
 
-    if (WIFEXITED(status) && !status) exit(0); // first success
+    if (WIFEXITED(status) && !status) exit(status); // first success
     if (fork()==0) {
       execlp(argv[2], argv[2], NULL);
       exit(127);
@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     return WIFEXITED(st) ? WEXITSTATUS(st) : 128 + WTERMSIG(st);
   }
 
+  wait(&st);
   return WIFEXITED(st) ? WEXITSTATUS(st) : 128 + WTERMSIG(st);
 
 }
