@@ -10,16 +10,16 @@ int main(int argc, char* argv[]) {
     close(fd[0]);
     dup2(fd[1], 1);
     argv[argc-1] = NULL;
+    close(fd[1]);
     execvp(argv[1], argv+1);
-    close(fd[1]); // if failed
     exit(127);
   }
 
   if (fork()==0) {
     close(fd[1]);
     dup2(fd[0], 0);
+    close(fd[0]);
     execvp(argv[argc-1], argv + argc - 1);
-    close(fd[0]); // if failed
     exit(127);
   }
 
