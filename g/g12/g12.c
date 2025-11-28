@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]){
   if (fork() == 0) {
-    int fd = open(argv[2], O_RDONLY, 0666);
+    int fd = open(argv[2], O_RDONLY);
     dup2(fd, 0);
     close(fd);
     execlp(argv[1], argv[1], NULL);
