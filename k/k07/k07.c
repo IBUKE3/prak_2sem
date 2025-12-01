@@ -12,7 +12,7 @@ int main(void) {
 
   if (fork()==0) {
     close(fd[0]);
-    while (read(0, &byte, 1)) {
+    while (read(0, &byte, 1) > 0) {
       if (flag) write(fd[1], &byte, 1); 
       flag = ~flag;
     }
@@ -22,7 +22,7 @@ int main(void) {
   if (fork()==0) {
     close(fd[1]);
     if (fork()==0) {
-      while (read(fd[0], &byte, 1)) {
+      while (read(fd[0], &byte, 1) >0) {
         if (flag) write(1, &byte, 1);
 	flag = ~flag;
       }
