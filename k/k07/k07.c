@@ -17,6 +17,7 @@ int main(void) {
       flag = ~flag;
     }
     close(fd[1]);
+    exit(0);
   }
 
   if (fork()==0) {
@@ -28,6 +29,7 @@ int main(void) {
       }
       close(fd[0]);
     }
+    exit(0);
   }
 
   close(fd[0]);
