@@ -35,7 +35,8 @@ int main(int argc, char* argv[]) {
     exit(WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status));
   }
 
-  if (fork()==0) {
+  pid_t pid;
+  if ((pid=fork())==0) {
     close(fd[1]);
     dup2(fd[0], 0);
     close(fd[0]);
@@ -46,8 +47,8 @@ int main(int argc, char* argv[]) {
   close(fd[1]);
 
   int st;
-  wait(&st);
-  wait(&st);
+  waitpid(pid, &st, 0);
+  while(wait(NULL)!=-1);
   return WIFEXITED(st) ? WEXITSTATUS(st) : 128 + WTERMSIG(st);
 
 }
