@@ -10,7 +10,6 @@ int main(int argc, char* argv[]) {
  
   int i = 0;
   while (strcmp(argv[i], "--")) i++;
-  printf("%s", argv[i]);
   if (fork()==0) {
     close(fd[0]);
     dup2(fd[1], 1);
@@ -20,7 +19,9 @@ int main(int argc, char* argv[]) {
     exit(127);
   }
 
-  if (fork()==0) {
+
+  pid_t pid;
+  if ((pid=fork())==0) {
     close(fd[1]);
     dup2(fd[0], 0);
     close(fd[0]);
@@ -32,8 +33,8 @@ int main(int argc, char* argv[]) {
   close(fd[1]);
 
   int st;
-  wait(&st);
-  wait(&st);
+  waitpid(pid, &st, 0);
+  while (wait(NULL) != -1);
 
   return (WIFEXITED(st)?WEXITSTATUS(st):WTERMSIG(st)+128);
 }
