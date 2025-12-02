@@ -14,7 +14,7 @@ int main(void){
     close(fd1[0]);
     dup2(fd1[1], 1);
     close(fd1[0]);
-    execlp("grep", "grep", "'('", NULL); 
+    execlp("grep", "grep", "(", NULL); 
     exit(127);
   }
 
@@ -42,6 +42,11 @@ int main(void){
     execlp("sort", "sort", "-u", NULL);
     exit(127);
   }
+
+  close(fd1[0]);
+  close(fd1[1]);
+  close(fd2[0]);
+  close(fd2[1]);
 
   while(wait(NULL)!=-1);
   
