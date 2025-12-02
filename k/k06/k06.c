@@ -14,7 +14,7 @@ int main(void){
     close(fd1[0]);
     dup2(fd1[1], 1);
     close(fd1[0]);
-    execlp("grep", "grep", "[^ ](", NULL); 
+    execlp("grep", "grep", "[a-zA-Z0-9_](", NULL); 
     exit(127);
   }
 
