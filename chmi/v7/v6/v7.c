@@ -190,6 +190,85 @@ void compute_func_1001_to_file(ld (*f)(ld x), char* funcf) {
 }
 
 
+void cubic_spline (ld (*f)(ld x), int n, char* splinef) {
+  // первый аргумент - указатель на функцию
+  // третий - количество узлов равномерной сетки
+    
+  ld *alphas = malloc((n+1)*sizeof(ld));
+  ld *betas = malloc((n+1)*sizeof(ld));
+  ld *c_array = malloc((n+1)*sizeof(ld));
+  ld *b_array = malloc((n+1)*sizeof(ld));
+  ld *d_array = malloc((n+1)*sizeof(ld));
+  ld *F_array = malloc((n+1)*sizeof(ld));
+  ld *x_array = malloc((n+1)*sizeof(ld));
+  ld *y_array = malloc((n+1)*sizeof(ld));
+
+  ld h = M_PI/(n-1);
+  ld tx = 0;
+
+  for (int i = 0; i <= n; i++) {
+    x_array[i] = tx;
+    y_array[i] = f(tx);
+    tx += h;
+  }
+
+  ld de = 1/(h*h);
+  F_array[1] = -6*(y_array[0] - 2*y_array[1] + y_array[2])*de;
+  alphas[1] = 0;
+  betas[1] = 0;
+
+  ld ta;
+  ld tf;
+  // рассмотрели начало вручную, поэтому с i=2
+  for (int i = 2; i < n-1; i++) {
+    tf = -6*(y_array[i-1] - 2*y_array[i] + y_array[i+1])*de;
+    F_array[i] = tf;
+    ta = -1/(4+alphas[i]);
+    alphas[i+1] = ta;
+    betas[i+1] = ta * (betas[i] + tf);
+  }
+
+  c_array[n] = 0;
+  c_array[0] = 0;
+  for (int i = n-1; i >= 1; i--) {
+    c_array[i] = alphas[i+1]*c_array[i+1] + betas[i+1];
+  }
+
+  for (int i = 1; i <= n; i++) {
+    d_array[i] = (c_array[i]-c_array[i-1])/h;
+  }
+
+  for (int i = 1; i <= n; i++) {
+    b_array[i] = c_array[i]*h/2 - d_array[i]*h*h/6 + (y_array[i]-y_array[i-1]);
+  }
+
+  FILE* sfile = fopen(splinef, "w");
+
+  ld h_new = M_PI/1000;
+  tx = 0;
+  for (int it = 0; it < 1001; it++) {
+    // вычисление для каждой точки сетки значения интерполянта
+    int part = floor(tx/h);
+    ld td = tx-x_array[part];
+    ld res = y_array[part] + b_array[part]*td + c_array[part] * pow(td, 2) / 2;
+    res += d_array[part]*pow(td, 3);
+    fprintf(sfile, "%Lf %Lf\n", tx, res);
+    tx+=h_new;
+  }	      
+
+  fclose(sfile);
+
+  free(alphas);
+  free(betas);
+  free(c_array);
+  free(b_array);
+  free(d_array);
+  free(F_array);
+  free(x_array);
+  free(y_array);
+}
+
+
 
 int main(void) {
   printf("___________________________________________________________\n");
@@ -222,6 +301,7 @@ int main(void) {
   compute_range(f2, f2_der, 17, "217interp.txt");
   compute_range(f2, f2_der, 33, "233interp.txt");
   compute_func_1001_to_file(f2, "f2.txt");
+  cubic_spline(f2, 1001, "sf2.txt");
   return 0; 
 
 }
