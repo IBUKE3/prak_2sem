@@ -72,8 +72,29 @@ void compute_range(ld (*f)(ld x), ld (*f_der)(ld x), int n) {
       }
       temp += (y[k] + (y_der[k]-2*y[k]*A[k])*(x[i] - x[k])) * prod;
     }
+
     fprintf(myout, "%Lf %Lf\n", x[i], temp);
     interp[i] = temp;
+  }
+
+  FILE* tfile = fopen("interp1011.txt", "w");
+
+  ld h = 0;
+  for (int i = 0; i < 1001; i++) {
+    for (int i = 0; i < n; i++) {
+      temp = 0;
+      for (int k = 0; k < n; k++) {
+        prod = 1;
+        for (int j = 0; j < n; j++) {
+          if (j != k) {
+             prod *= pow((x[i]-x[j]),2) / pow((x[k]-x[j]),2);
+  	}
+      }
+      temp += (y[k] + (y_der[k]-2*y[k]*A[k])*(x[i] - x[k])) * prod;
+        }
+    fprintf(tfile, "%Lf %Lf\n", h, temp);
+     }
+    h += M_PI/1000;
   }
 
 
