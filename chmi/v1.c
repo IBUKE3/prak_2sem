@@ -5,27 +5,22 @@
 typedef long double ld;
 
 ld f1(ld x) {
-  ld x1 = x;
   ld res = 1;
-  x *= x1; //x^2
-  res -= 8*x;
-  x *= x1; // x^3
-  res -= 8*x;
-  x *= x1; // x^4
-	 printf("--%Lf--", x);
+  x *= x; // x^2
+  res -= 12*x;
+  x *= x; // x^4
   res += 16*x; 
-  // res = 16x^4-8x^3-8x^2+1
+  // res = 16x^4-12x^2+1
   return res;
 }
 
 ld f1_der(ld x) {
   ld x_1 = x;
-  ls res = -16*x;
+  ld res = -24*x;
   x *= x_1; // x^2
-  res -= 24*x;
-  x *=x_1; // x^3
+  x *= x_1; // x^3
   res += 64*x;
-  // res = 64x^3 -24x^2 - 16x
+  // res = 64x^3-24x
   return res;
 }
 
@@ -34,16 +29,19 @@ void compute_range(ld (*f)(ld x), ld (*f_der)(ld x), int n) {
 
   ld *x = malloc(n*sizeof(ld));
   ld *y = malloc(n*sizeof(ld));
+  ld *y_der = malloc(n*sizeof(ld));
   ld *A = malloc(n*sizeof(ld));
 
   ld t = 0;
   
   FILE* out = fopen("data.txt", "w");
+  FILE* myout = fopen("myout.txt", "w");
 
 
   for (int i = 0; i < n; i++) {
     x[i] = t;
     y[i] = f(t);
+    y_der[i] = f_der(t);
     t += h;
 
     fprintf(out, "%Lf %Lf\n", x[i], y[i]);
@@ -51,18 +49,39 @@ void compute_range(ld (*f)(ld x), ld (*f_der)(ld x), int n) {
 
   for (int i = 0; i < n; i++) {
     A[i] = 0;
-    A[i] = 0;
     for (int j = 0; j < n; j++) {
       if (j!=i) {
-        A += 1/(x[i]-x[j]);
+        A[i] += 1/(x[i]-x[j]);
       }
     }
   }
 
+  ld *interp = malloc(n*sizeof(ld));
+
+  ld temp = 0;
+  ld prod;
+
+  for (int i = 0; i < n; i++) {
+    temp = 0;
+    for (int k = 0; k < n; k++) {
+      prod = 1;
+      for (int j = 0; j < n; j++) {
+        if (j != k) {
+          prod *= pow((x[i]-x[j]),2) / pow((x[k]-x[j]),2);
+	}
+      }
+      temp += (y[k] + (y_der[k]-2*y[k]*A[k])*(x[i] - x[k])) * prod;
+    }
+    fprintf(myout, "%Lf %Lf\n", x[i], temp);
+    interp[i] = temp;
+  }
 
 
   free(x);
   free(y);
+  free(y_der);
+  free(A);
+  free(interp);
   fclose(out);
 
 }
@@ -75,7 +94,7 @@ void plot(void) {
 
 
 int main(void) {
-  compute_range(f1, 65);
+  compute_range(f1, f1_der,  65);
   return 0; 
 
 }
