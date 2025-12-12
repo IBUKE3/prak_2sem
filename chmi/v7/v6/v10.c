@@ -251,10 +251,10 @@ void cubic_spline (ld (*f)(ld x), int m, char* splinef) {
     d_array[i] = (c_array[i]-c_array[i-1])/h;
   }
 
-  ld h_div_3=h/3;
-  ld h_div_6=h/6;
+  //ld h_div_3=h/3;
+  //ld h_div_6=h/6;
   for (int i = 1; i <= n; i++) {
-    b_array[i] = (y_array[i] - y_array[i-1])/h - c_array[i-1]*h_div_3 - c_array[i]*h_div_6;
+    b_array[i] = c_array[i]*h/2 - d_array[i]*h*h/6 + (y_array[i]-y_array[i-1]);
   }
 
   FILE* sfile = fopen(splinef, "w");
@@ -269,8 +269,8 @@ void cubic_spline (ld (*f)(ld x), int m, char* splinef) {
     // вычисление для каждой точки сетки значения интерполянта
     int part = floor(tx/h);
     ld td = tx-x_array[part];
-    ld res = y_array[part] + b_array[part]*td + c_array[part] * pow(td, 2) / 2;
-    res += d_array[part]*pow(td, 3);
+    ld res = y_array[part] + b_array[part+1]*td + c_array[part] * pow(td, 2) / 2;
+    res += d_array[part+1]*pow(td, 3);
     r = res - f(tx) > 0 ? res - f(tx) : f(tx) - res;
     if (r > r_max) {
       r_max = r;
