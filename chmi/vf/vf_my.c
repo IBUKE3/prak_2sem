@@ -303,7 +303,7 @@ int main(void) {
   compute_range(f1, f1_der, t, "a.txt");
   // использовать для ручного выбора количества узлов
   */
-/*
+
   compute_range(f1, f1_der, 33, "33interp.txt");
   compute_func_1001_to_file(f1, "f1.txt");
   printf("\n");
@@ -318,7 +318,7 @@ int main(void) {
   compute_range(f2, f2_der, 17, "217interp.txt");
   compute_range(f2, f2_der, 33, "233interp.txt");
   compute_func_1001_to_file(f2, "f2.txt");
-  */
+  
   cubic_spline(f2, 17, "sf2.txt");
   return 0; 
 
