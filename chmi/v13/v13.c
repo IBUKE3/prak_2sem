@@ -239,7 +239,7 @@ void cubic_spline (ld (*f)(ld x), int m, char* splinef) {
   c_array[n] = 0;
   c_array[0] = 0;
   for (int i = n-1; i >= 0; i--) {
-    c_array[i] = alphas[i+1]*c_array[i+1] + betas[i+1];
+    c_array[i] = (alphas[i+1]*c_array[i+1] + betas[i+1]);
   }
 
 /*
@@ -249,14 +249,16 @@ void cubic_spline (ld (*f)(ld x), int m, char* splinef) {
   printf("%Lf \n", c_array[0]);
 */
 
-  for (int i = 1; i <= n; i++) {
-    d_array[i] = ((c_array[i]-c_array[i-1])/h);
+  d_array[1]=c_array[0]/h;
+  for (int i = 2; i <= n; i++) {
+    d_array[i] = ((c_array[i-1]-c_array[i-2])/h);
   }
 
   //ld h_div_3=h/3;
   //ld h_div_6=h/6;
+  d_array[0] = 0;
   for (int i = 1; i <= n; i++) {
-    b_array[i] = - c_array[i-1]*h/2 - d_array[i]*h*h/6 + (y_array[i]-y_array[i-1])/h;
+    b_array[i] = -c_array[i-1]*h/2 - d_array[i]*h*h/6 + (y_array[i]-y_array[i-1])/h;
     //b_array[i] = (y_array[i] - y_array[i-1]) / h - (h*( 2*c_array[i-1] + c_array[i]) / 3);
   }
 
