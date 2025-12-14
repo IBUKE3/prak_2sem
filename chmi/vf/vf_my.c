@@ -297,12 +297,12 @@ int main(void) {
   compute_range(f1, f1_der, 9, "9interp.txt");
   compute_range(f1, f1_der, 17, "17interp.txt");
 
-  
+/*  
   int t;
   if(scanf("%d", &t)==-1) return -1;
   compute_range(f1, f1_der, t, "a.txt");
   // использовать для ручного выбора количества узлов
- 
+ */
 
   compute_range(f1, f1_der, 33, "33interp.txt");
   compute_func_1001_to_file(f1, "f1.txt");
@@ -319,7 +319,24 @@ int main(void) {
   compute_range(f2, f2_der, 33, "233interp.txt");
   compute_func_1001_to_file(f2, "f2.txt");
   
-  cubic_spline(f2, 17, "sf2.txt");
+
+  printf("___________________________________________________________\n");
+  printf("***********************************************************\n");
+  printf("                        СПЛАЙН С f1\n");
+  printf("***********************************************************\n");
+  printf("___________________________________________________________\n");
+  cubic_spline(f1, 5, "s5f1.txt");
+  cubic_spline(f1, 17, "s17f1.txt");
+  cubic_spline(f1, 65, "s65f1.txt");
+
+  printf("___________________________________________________________\n");
+  printf("***********************************************************\n");
+  printf("                        СПЛАЙН С f2\n");
+  printf("***********************************************************\n");
+  printf("___________________________________________________________\n");
+  cubic_spline(f2, 5, "s5f2.txt");
+  cubic_spline(f2, 17, "s17f2.txt");
+  cubic_spline(f2, 65, "s65f2.txt");
   return 0; 
 
 }
