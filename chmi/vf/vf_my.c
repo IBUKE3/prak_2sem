@@ -297,12 +297,12 @@ int main(void) {
   compute_range(f1, f1_der, 9, "9interp.txt");
   compute_range(f1, f1_der, 17, "17interp.txt");
 
-  /*
+  
   int t;
   if(scanf("%d", &t)==-1) return -1;
   compute_range(f1, f1_der, t, "a.txt");
   // использовать для ручного выбора количества узлов
-  */
+ 
 
   compute_range(f1, f1_der, 33, "33interp.txt");
   compute_func_1001_to_file(f1, "f1.txt");
