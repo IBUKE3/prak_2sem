@@ -34,6 +34,13 @@ int main (int argc, char*argv[]) {
   msqid_c2s = msgget(key, IPC_CREAT|0666); // очередь сообщений
   msqid_s2c = msgget(key2, IPC_CREAT|0666);
 
+  int N;
+  if(scanf("%d", &N)==0) return 1;
+  if (N==0) {
+    raise(SIGINT);
+    printf("0\n");
+    return 0;    
+  }
 
   if (fork()==0) {
     int m = 0;
@@ -51,8 +58,8 @@ int main (int argc, char*argv[]) {
       }
     }
   }
-  int N;
-  if(scanf("%d", &N)==0) return 1;
+  //int N;
+  //if(scanf("%d", &N)==0) return 1;
   if (fork()==0) {
     // client
     Message.mtype = 1;
