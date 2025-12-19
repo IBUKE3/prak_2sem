@@ -38,13 +38,13 @@ int main (int argc, char*argv[]) {
   if (fork()==0) {
     int m = 0;
     while(1) {
-      msgrcv(msqid_c2s, (struct msgduf*)(&Message), sizeof(long), 0, 0); // любой тип получаем
+      msgrcv(msqid_c2s, (&Message), 0, 0, 0); // любой тип получаем
       if (Message.mtype == 1) {
         m++;
       }
       else if (Message.mtype == 2) {
         Message.mtype = m;
-        msgsnd(msqid_s2c, (struct msgduf*)(&Message), sizeof(long), 0);
+        msgsnd(msqid_s2c, (&Message), 0, 0);
       }
       else if (Message.mtype == 3) {
         exit(0);
@@ -57,14 +57,14 @@ int main (int argc, char*argv[]) {
     // client
     Message.mtype = 1;
     for (int i = 0; i < N; i++) {
-      msgsnd(msqid_c2s, (struct msgduf*)(&Message), sizeof(long), 0);
+      msgsnd(msqid_c2s, (&Message), 0, 0);
     }
     Message.mtype = 2;
-    msgsnd(msqid_c2s, (struct msgduf*)(&Message), sizeof(long), 0);
-    msgrcv(msqid_s2c, (struct msgduf*)(&Message), sizeof(long), 0, 0);
+    msgsnd(msqid_c2s, (&Message), 0, 0);
+    msgrcv(msqid_s2c, (&Message), 0, 0, 0);
     printf("%ld\n", Message.mtype);
     Message.mtype = 3;
-    msgsnd(msqid_c2s, (struct msgduf*)(&Message), sizeof(long), 0);
+    msgsnd(msqid_c2s, (&Message), 0, 0);
     exit(0);
   }
 
